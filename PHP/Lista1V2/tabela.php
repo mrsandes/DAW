@@ -13,7 +13,7 @@
             <th>Escolaridade do Pai</th>
         </tr>";
 
-    while(!feof($arquivo)) {
+    while (!feof($arquivo)) {
         $linha = fgets($arquivo);
         
         if (!empty(trim($linha))) {

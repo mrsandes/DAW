@@ -1,0 +1,17 @@
+[
+    {
+        "nome": "marco",
+        "senha": "abc",
+        "admin": true
+    },
+    {
+        "nome": "joao",
+        "senha": "abc",
+        "admin": false
+    },
+    {
+        "nome": "a",
+        "senha": "abc",
+        "admin": false
+    }
+]
