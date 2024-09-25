@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -6,23 +10,28 @@
 </head>
 
 <body>
-    <h2>Pagina do Admin</h2>
+    <h2>Ola admin <?php echo $_SESSION['usuarioAtual']['nome'] ?></h2>
 
     <form method="POST" action="">
         <input type="radio" name="opcoes" value="removerUsuario"> Remover usuario: <br>
+
         Nome:
         <input type="text" name="remover"> <br>
 
         <br>
 
         <input type="radio" name="opcoes" value="modificarUsuario"> Modificar usuario: <br>
-        Antigo nome:
+
+        Nome:
         <input type="text" name="antigoNome"> <br>
+
         Novo nome:
         <input type="text" name="novoNome"> <br>
+
         Nova senha:
         <input type="text" name="novaSenha"> <br>
-        Novo admin:
+
+        admin?
         <input type="checkbox" name="novoAdmin"> <br>
 
         <br>
@@ -30,22 +39,27 @@
         <input type="submit" name="enviar" value="Enviar">
     </form>
 
+    <form method="POST" action="32.php">
+        <br>
+
+        <input type="submit" name="sair" value="Sair">
+    </form>
+
     <?php
         function removerUsuario($nome, $usuarios) {    
-            $usuarioEncontrado = false;
-        
+            if ($_SESSION['usuarioAtual']['nome'] == $nome)        {
+                return;
+            }
+
             for ($i = 0; $i < count($usuarios); $i++) {
                 if ($usuarios[$i]['nome'] == $nome) {
                     array_splice($usuarios, $i, 1);
 
-                    $usuarioEncontrado = true;
+                    $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
+                    file_put_contents(__DIR__ . '/usuarios.json', $dados);
+
                     break;
                 }
-            }
-        
-            if ($usuarioEncontrado) {
-                $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
-                file_put_contents(__DIR__ . '/usuarios.json', $dados);
             }
         }
 
@@ -56,10 +70,8 @@
                 }
             }
 
-            $usuarioEncontrado = false;
-
             for ($i = 0; $i < count($usuarios); $i++) { 
-               if ($usuarios[$i]['nome'] == $antigoNome) {
+                if ($usuarios[$i]['nome'] == $antigoNome) {
                     if ($novoNome  != "") {
                         $usuarios[$i]['nome'] = $novoNome;
                     } 
@@ -72,13 +84,17 @@
                         $usuarios[$i]['admin'] = !$usuarios[$i]['admin'];
                     } 
 
-                    $usuarioEncontrado = true;
-               }
-            }
+                    $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
+                    file_put_contents(__DIR__ . '/usuarios.json', $dados);
 
-            if ($usuarioEncontrado) {
-                $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
-                file_put_contents(__DIR__ . '/usuarios.json', $dados);
+                    break;
+                }
+            }   
+
+            if ($_SESSION['usuarioAtual']['nome'] == $antigoNome) {
+                $_SESSION['usuarioAtual']['nome'] = $novoNome;
+                $_SESSION['usuarioAtual']['senha'] = $novaSenha;
+                $_SESSION['usuarioAtual']['admin'] = $novoAdmin;
             }
         }
 
@@ -91,7 +107,6 @@
         }
 
         $usuarios = json_decode(file_get_contents(__DIR__ . '/usuarios.json'), true);
-
 
         listaUsuarios($usuarios);
 

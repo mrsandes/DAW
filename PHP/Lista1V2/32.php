@@ -1,3 +1,9 @@
+<?php
+    session_start();
+
+    unset($_SESSION['usuarioAtual']);
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -23,46 +29,27 @@
     <?php
         $usuarios = json_decode(file_get_contents(__DIR__ . '/usuarios.json'), true);
 
-        $usuarioAtual = [
+        if (isset($_POST['entrar']) || isset($_POST['cadastrar']))
+
+        $_SESSION['usuarioAtual'] = [
             'nome' => $_POST['nome'],
             'senha' => $_POST['senha'],
             'admin' => false
         ];
-        
-        if (isset($_POST['cadastrar'])) {
-            $usuarioExiste = false;
-            
-            foreach ($usuarios as $usuario) {
-                if ($usuarioAtual['nome'] == $usuario['nome']) {
-                    $usuarioExiste = true;
-
-                    header("location: 32.php");
-                }
-            }
-
-            if (!$usuarioExiste) {
-                $usuarios[] = $usuarioAtual;
-
-                $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
-                file_put_contents(__DIR__ . '/usuarios.json', $dados);
-
-                header("location: usuario.php?usuarioAtual=" . $usuarioAtual);
-            }
-        }
 
         if (isset($_POST['entrar'])) {
             $usuarioEncontrado = false;
         
             foreach ($usuarios as $usuario) {
-                if ($usuarioAtual['nome'] == $usuario['nome']) {
+                if ($_SESSION['usuarioAtual']['nome'] == $usuario['nome']) {
                     $usuarioEncontrado = true;
         
-                    if ($usuarioAtual['senha'] == $usuario['senha'] && $usuario['admin']) {
-                        header("location: admin.php?usuarioAtual=" . $usuarioAtual);
+                    if ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && $usuario['admin']) {
+                        header("location: admin.php");
                     } 
                     
-                    elseif ($usuarioAtual['senha'] == $usuario['senha'] && !$usuario['admin']) {
-                        header("location: usuario.php?usuarioAtual=" . $usuarioAtual);
+                    elseif ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && !$usuario['admin']) {
+                        header("location: usuario.php");
                     } 
                     
                     else {
@@ -77,7 +64,27 @@
                 header("location: 32.php");
             }
         }
-    ?>
 
+        if (isset($_POST['cadastrar'])) {
+            $usuarioExiste = false;
+            
+            foreach ($usuarios as $usuario) {
+                if ($_SESSION['usuarioAtual']['nome'] == $usuario['nome']) {
+                    $usuarioExiste = true;
+
+                    header("location: 32.php");
+                }
+            }
+
+            if (!$usuarioExiste) {
+                $usuarios[] = $_SESSION['usuarioAtual'];
+
+                $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
+                file_put_contents(__DIR__ . '/usuarios.json', $dados);
+
+                header("location: usuario.php");
+            }
+        }
+    ?>
 </body>
 </html>

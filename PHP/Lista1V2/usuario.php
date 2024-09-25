@@ -1,3 +1,7 @@
+<?php
+    session_start();
+?>
+
 <!DOCTYPE html>
 
 <html>
@@ -6,7 +10,7 @@
 </head>
 
 <body>
-    <h2>Pagina do usuario</h2>
+    <h2>Ola usuario <?php echo $_SESSION['usuarioAtual']['nome'] ?></h2>
 
     <form method="POST" action="">
         <input type="radio" name="opcoes" value="modificarUsuario"> Modificar nome e senha: <br>
@@ -19,6 +23,12 @@
         <input type="submit" name="enviar" value="Enviar">
     </form>
 
+    <form method="POST" action="32.php">
+        <br>
+
+        <input type="submit" name="sair" value="Sair">
+    </form>
+
     <?php
         function modificarUsuario($antigoNome, $novoNome, $novaSenha, $usuarios) {
             foreach ($usuarios as $usuario) {
@@ -26,8 +36,6 @@
                     return;
                 }
             }
-
-            $usuarioEncontrado = false;
 
             for ($i = 0; $i < count($usuarios); $i++) { 
                 if ($usuarios[$i]['nome'] == $antigoNome) {
@@ -39,25 +47,22 @@
                         $usuarios[$i]['senha'] = $novaSenha;
                     } 
 
-                    $usuarioEncontrado = true;
-                }
-            }
+                    $_SESSION['usuarioAtual'] = $usuarios[$i];
 
-            if ($usuarioEncontrado) {
-                $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
-                file_put_contents(__DIR__ . '/usuarios.json', $dados);
+                    $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
+                    file_put_contents(__DIR__ . '/usuarios.json', $dados);
+
+                    break;
+                }
             }
         }
 
-        session_start();
-
         $usuarios = json_decode(file_get_contents(__DIR__ . '/usuarios.json'), true);
-        $usuarioAtual = $_SESSION['usuarioAtual'];
 
         if (isset($_POST['enviar'])) {
             switch ($_POST['opcoes']) {
                 case "modificarUsuario":
-                    modificarUsuario($usuarioAtual['nome'], $_POST['novoNome'], $_POST['novaSenha'], $usuarios);
+                    modificarUsuario($_SESSION['usuarioAtual']['nome'], $_POST['novoNome'], $_POST['novaSenha'], $usuarios);
                     header("Refresh: 0");
             }
         }
