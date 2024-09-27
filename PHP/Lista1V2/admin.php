@@ -14,40 +14,29 @@
 
     <form method="POST" action="">
         <input type="radio" name="opcoes" value="removerUsuario"> Remover usuario: <br>
-
         Nome:
-        <input type="text" name="remover"> <br>
-
-        <br>
-
+        <input type="text" name="remover"> <br> <br>
+        
         <input type="radio" name="opcoes" value="modificarUsuario"> Modificar usuario: <br>
-
         Nome:
         <input type="text" name="antigoNome"> <br>
-
         Novo nome:
         <input type="text" name="novoNome"> <br>
-
         Nova senha:
         <input type="text" name="novaSenha"> <br>
-
         admin?
         <input type="checkbox" name="novoAdmin"> <br>
 
-        <br>
-
-        <input type="submit" name="enviar" value="Enviar">
+        <br> <input type="submit" name="enviar" value="Enviar">
     </form>
 
     <form method="POST" action="32.php">
-        <br>
-
-        <input type="submit" name="sair" value="Sair">
+        <br> <input type="submit" name="sair" value="Sair">
     </form>
 
     <?php
         function removerUsuario($nome, $usuarios) {    
-            if ($_SESSION['usuarioAtual']['nome'] == $nome)        {
+            if ($_SESSION['usuarioAtual']['nome'] == $nome) {
                 return;
             }
 
@@ -111,14 +100,16 @@
         listaUsuarios($usuarios);
 
         if (isset($_POST['enviar'])) {
-            switch ($_POST['opcoes']) {
+            switch ($_POST['opcoes'] && isset($_POST['opcoes'])) {
                 case "removerUsuario":
                     removerUsuario($_POST['remover'], $usuarios);
-                    header("Refresh: 0");
+                    echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                    Exit();
 
                 case "modificarUsuario":
                     modificarUsuario($_POST['antigoNome'], $_POST['novoNome'], $_POST['novaSenha'], $_POST['novoAdmin'], $usuarios);
-                    header("Refresh: 0");
+                    echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                    Exit();
             }
         }
     ?>

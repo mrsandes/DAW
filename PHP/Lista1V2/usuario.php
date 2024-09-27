@@ -59,11 +59,12 @@
 
         $usuarios = json_decode(file_get_contents(__DIR__ . '/usuarios.json'), true);
 
-        if (isset($_POST['enviar'])) {
+        if (isset($_POST['enviar']) && isset($_POST['opcoes'])) {
             switch ($_POST['opcoes']) {
                 case "modificarUsuario":
                     modificarUsuario($_SESSION['usuarioAtual']['nome'], $_POST['novoNome'], $_POST['novaSenha'], $usuarios);
-                    header("Refresh: 0");
+                    echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                    Exit();
             }
         }
     ?>

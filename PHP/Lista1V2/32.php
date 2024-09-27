@@ -12,30 +12,31 @@
 </head>
 
 <body>
-    <h2>Questao 3.2</h2>
+    <main class="main">
+        <h2>Questao 3.2</h2>
 
-    <form method="POST" action="">
-        Nome:
-        <input type="text" name="nome" required>
+        <form method="POST" action="">
+            <input type="text" name="nome" placeholder="Nome" required> <br>
 
-        Senha:
-        <input type="text" name="senha" required>      
+            <input type="text" name="senha" placeholder="Senha" required> <br>     
 
-        <input type="submit" name="cadastrar" value="Cadastrar">
-        
-        <input type="submit" name="entrar" value="Entrar">
-    </form>
-
+            <div class="button">
+                <input type="submit" name="cadastrar" value="Cadastrar">
+                <input type="submit" name="entrar" value="Entrar">
+            </div>
+        </form>
+    </main>
+   
     <?php
         $usuarios = json_decode(file_get_contents(__DIR__ . '/usuarios.json'), true);
 
-        if (isset($_POST['entrar']) || isset($_POST['cadastrar']))
-
-        $_SESSION['usuarioAtual'] = [
-            'nome' => $_POST['nome'],
-            'senha' => $_POST['senha'],
-            'admin' => false
-        ];
+        if (isset($_POST['entrar']) || isset($_POST['cadastrar'])) {
+            $_SESSION['usuarioAtual'] = [
+                'nome' => $_POST['nome'],
+                'senha' => $_POST['senha'],
+                'admin' => false
+            ];
+        }
 
         if (isset($_POST['entrar'])) {
             $usuarioEncontrado = false;
@@ -45,15 +46,18 @@
                     $usuarioEncontrado = true;
         
                     if ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && $usuario['admin']) {
-                        header("location: admin.php");
+                        echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=admin.php'>";
+                        Exit();
                     } 
                     
                     elseif ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && !$usuario['admin']) {
-                        header("location: usuario.php");
+                        echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=usuario.php'>";
+                        Exit();
                     } 
                     
                     else {
-                        header("location: 32.php");
+                        echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                        Exit();
                     }
         
                     break;
@@ -61,7 +65,8 @@
             }
 
             if (!$usuarioEncontrado) {    
-                header("location: 32.php");
+                echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                Exit();
             }
         }
 
@@ -72,7 +77,8 @@
                 if ($_SESSION['usuarioAtual']['nome'] == $usuario['nome']) {
                     $usuarioExiste = true;
 
-                    header("location: 32.php");
+                    echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
+                    Exit();
                 }
             }
 
@@ -82,7 +88,8 @@
                 $dados = json_encode($usuarios, JSON_PRETTY_PRINT);
                 file_put_contents(__DIR__ . '/usuarios.json', $dados);
 
-                header("location: usuario.php");
+                echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=usuario.php'>";
+                Exit();
             }
         }
     ?>
