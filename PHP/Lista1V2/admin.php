@@ -99,8 +99,8 @@
 
         listaUsuarios($usuarios);
 
-        if (isset($_POST['enviar'])) {
-            switch ($_POST['opcoes'] && isset($_POST['opcoes'])) {
+        if (isset($_POST['enviar']) && isset($_POST['opcoes'])) {
+            switch ($_POST['opcoes']) {
                 case "removerUsuario":
                     removerUsuario($_POST['remover'], $usuarios);
                     echo "<meta HTTP-EQUIV='refresh' CONTENT='0'>";
