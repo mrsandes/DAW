@@ -1,5 +1,5 @@
 <?php
-    function selectFromTable($campos, $orderby, $whereClause, $limit) {
+    function selectFromTable($campos, $orderby, $whereClause, $limit, $groupby) {
         $pdo = new PDO("mysql:host=127.0.0.1;dbname=a2022951047@teiacoltec.org", "a2022951047@teiacoltec.org", "coltec2024");
         $tabela = 'resultado_imiron';
 
@@ -7,44 +7,55 @@
         $string = 'SELECT  ';
 
         for ($i = 0; $i < $max - 1; $i++) {
-            $string = $string . ' ' . $campos[$i];
-            $string = $string . ', ';
+            $string .= ' ' . $campos[$i];
+            $string .= ', ';
         }
 
-        $string = $string . ' ' . $campos[$i];
+        $string .= ' ' . $campos[$i];
 
-        $string = $string . ' from ' . $tabela; 
+        $string .= ' from ' . $tabela; 
 
         if (!empty($whereClause)) {
-            $string = $string . ' from ' . $tabela . ' where ' . $whereClause; 
+            $string .= ' where ' . $whereClause; 
         }
 
         if (!empty($orderby)) {
-            $string = $string . ' order by ' . $orderby . ' asc'; 
+            $string .= ' order by ' . $orderby; 
+        }
+
+        if (!empty($groupby)) {
+            $string .= ' group by ' . $groupby; 
         }
 
         if (!empty($limit)) {
-            $string = $string . ' limit ' . $limit;
+            $string .= ' limit ' . $limit;
         }
 
         else {
-            $string = $string . ';';
+            $string .= ';';
         }
 
+        echo $string;
+
         $stmt = $pdo->prepare($string);
+
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
         $stmt->execute(); 
         
         return $stmt->fetchAll();
-        // return $string;
     }
 
-    function printTable($table, $column_names) {
+    function printTable($table) {
         echo '<table>';
 
-        foreach ($column_names as $name) {
-            echo '<th>' . $name. '</th>';
+        echo '<tr>';
+
+        foreach (array_keys($table[0]) as $value) {
+            echo '<th>' . $value . '</th>';
         }
+
+        echo '</tr>';
 
         foreach ($table as $row) {   
             echo '<tr>';
