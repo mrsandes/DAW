@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 
-<body>
+<body style="margin:30px;">
     <form action="" method='post'>
         <input type="submit" value="Mostrar toda tabela" name='all'>
     </form>    
@@ -89,22 +89,23 @@
     <br>
 
     <form action="" method="post">
-        Atletas Brasileiros
         <input type="submit" value='fazer busca' name='busca1'>
+        Atletas Brasileiros
         <br>
 
-        Paises e numero de atletas
         <input type="submit" value='fazer busca' name='busca2'>
+        Paises e numero de atletas
         <br>
 
-        MPRO
         <input type="submit" value='fazer busca' name='busca3'>
+        MPRO
         <br>
 
-        Melhor BR
         <input type="submit" value='fazer busca' name='busca4'>
+        Melhor BR
         <br>
     </form>
+</body>
 
     <?php   
         require_once("functions.php");
@@ -163,6 +164,9 @@
         else if (isset($_POST['busca3'])) { 
             printTable(selectFromTable(["Name", "Country", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time", "(Overall_Rank - Swim_Rank) AS Swim_Rank_Diff", "(Overall_Rank - Bike_Rank) AS Bike_Rank_Diff", "(Overall_Rank - Run_Rank) AS Run_Rank_Diff"], "Finish_Status desc, Division_Rank asc", "Division = 'MPRO'", "", ""));
         }
+
+        else if (isset($_POST['busca4'])) { 
+            printTable(selectFromTable(["Name", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time"], "Finish_Status desc, Division_Rank asc", "Country='Brazil'", 1, ""));
+        }
     ?>
-</body>
 </html>
