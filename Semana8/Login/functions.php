@@ -16,7 +16,14 @@
 
     function updateUser($antigoNome, $novoNome, $novaSenha, $novoAdmin) {
         global $pdo;
-        $novoAdmin = ($novoAdmin !== 0 && $novoAdmin !== 1) ? 0 : $novoAdmin;
+
+        if (!is_int($novoAdmin) && $novoAdmin) {
+            $novoAdmin = 1;
+        }
+
+        else if (!is_int($novoAdmin) && !$novoAdmin) {
+            $novoAdmin = 0;
+        }
 
         $stmt = $pdo->prepare("UPDATE Login SET nome = ?, senha = ?, admin = ? WHERE nome = ?");
         $stmt->execute([$novoNome, $novaSenha, $novoAdmin, $antigoNome]);

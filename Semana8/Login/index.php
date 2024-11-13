@@ -14,6 +14,8 @@
 
 <body>
     <main class="main">
+        <p>Usuário root para teste: admin 123</p>
+
         <form method="POST" action="">
             <input type="text" name="nome" placeholder="Nome" required> <br>
 
@@ -28,6 +30,10 @@
    
     <?php
         $_SESSION['valores'] = selectPDO();
+
+        foreach ($_SESSION['valores'] as $valor) {
+            echo $valor['nome'] . " | " . $valor['senha'] . " | " . $valor['admin'] . "<br>";
+        }
         
         if (isset($_POST['entrar']) || isset($_POST['cadastrar'])) {
             $_SESSION['usuarioAtual'] = [
@@ -45,14 +51,14 @@
                     $usuarioEncontrado = true;
         
                     if ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && $usuario['admin']) {
-                        header("Location:admin.php");
-                        // echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=admin.php'>";
+                        // header("Location:admin.php");
+                        echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=admin.php'>";
                         exit();
                     } 
                     
                     elseif ($_SESSION['usuarioAtual']['senha'] == $usuario['senha'] && !$usuario['admin']) {
-                        header("Location:usuario.php");
-                        // echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=usuario.php'>";
+                        // header("Location:usuario.php");
+                        echo "<meta HTTP-EQUIV='refresh' CONTENT='0; URL=usuario.php'>";
                         exit();
                     } 
                     
