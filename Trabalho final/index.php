@@ -76,6 +76,7 @@
 
         Selecionar primeiros ou ultimos
         <select name="top_down" id="">
+            <option value="">None</option>
             <option value="asc">primeiros</option>
             <option value="desc">ultimos</option>
         </select>
@@ -116,11 +117,12 @@
 
         else if (isset($_POST['busca'])) {
             $whereClause = "";
-
+            $orderByClause = "";
+        
             if ($_POST['pais'] != "none") {
                 $whereClause .= "Country=" . '\'' . $_POST['pais'] . '\'';
             }
-
+        
             if ($_POST['divisao'] != "none") {
                 if (!empty($whereClause)) {
                     $whereClause .= " and ";
@@ -128,33 +130,33 @@
 
                 $whereClause .= "Division=" . '\'' . $_POST['divisao'] . '\'';
             }
-
-            if ($_POST['modalidade'] != "none") {
-                if (!empty($whereClause)) {
-                    $whereClause .= " and ";
-                }
-                
+        
+            if ($_POST['modalidade'] != "none") {       
                 switch ($_POST['modalidade']) {
                     case 'Run_Rank':
-                        $whereClause .= "Run_Rank is not null";
+                        $orderByClause = "Run_Rank IS NULL, Run_Rank ";
                         break;
-
+        
                     case 'Swim_Rank':
-                        $whereClause .= "Swim_Rank is not null";
+                        $orderByClause = "Swim_Rank IS NULL, Swim_Rank ";
                         break;
-
+        
                     case 'Bike_Rank':
-                        $whereClause .= "Bike_Rank is not null";
+                        $orderByClause = "Bike_Rank IS NULL, Bike_Rank ";
                         break;
                 }
             }
-
-            printTable(selectFromTable(["*"], 'Finish_Status desc, Division_Rank ' . $_POST['top_down'], $whereClause, $_POST['quantidade_linhas'], ""));
+        
+            if (empty($orderByClause)) {
+                $orderByClause = "Overall_Rank IS NULL, Overall_Rank ";
+            }
+        
+            printTable(selectFromTable(["*"], $orderByClause . $_POST['top_down'], $whereClause, $_POST['quantidade_linhas'], ""));
         }
 
         else if (isset($_POST['busca1'])) { 
             printTable(selectFromTable(["count(*) as 'Brasilian athletes'"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
-            printTable(selectFromTable(["*"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
+            printTable(selectFromTable(["*"], 'Overall_Rank IS NULL, Overall_Rank', "Country='Brazil'", "", ""));
         }
 
         else if (isset($_POST['busca2'])) { 
