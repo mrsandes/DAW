@@ -30,10 +30,6 @@
    
     <?php
         $_SESSION['valores'] = selectPDO();
-
-        foreach ($_SESSION['valores'] as $valor) {
-            echo $valor['nome'] . " | " . $valor['senha'] . " | " . $valor['admin'] . "<br>";
-        }
         
         if (isset($_POST['entrar']) || isset($_POST['cadastrar'])) {
             $_SESSION['usuarioAtual'] = [

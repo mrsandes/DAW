@@ -76,12 +76,15 @@
     <?php   
         require_once("functions.php");
 
+        $pdo = new PDO("mysql:host=127.0.0.1;dbname=a2022951047@teiacoltec.org", "a2022951047@teiacoltec.org", "coltec2024");
+        $tabela = 'municipios_brasil_populacao_2022_V5';
+
         if (isset($_POST['all'])) {
-            printTable(selectFromTable(["*"], "", "", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["*"], "", "", "", ""));
         }
 
         else if (isset($_POST['estados'])) {
-            printTable(selectFromTable(["Unidade_federativa as 'Estado'", "count(Unidade_federativa) as 'Numero de municípios'"], "Unidade_federativa", "", "", "Unidade_federativa"));
+            printTable(selectFromTable($pdo, $tabela, ["Unidade_federativa as 'Estado'", "count(Unidade_federativa) as 'Numero de municípios'"], "Unidade_federativa", "", "", "Unidade_federativa"));
         }
 
         else if (isset($_POST['busca'])) {
@@ -94,7 +97,7 @@
             }
 
             if (!empty($_POST['num_municipios'])) {
-                $orderByClause = "População asc";
+                $orderByClause = "População desc";
                 $limitClause = $_POST['num_municipios'];
             }
 
@@ -103,22 +106,22 @@
             }
 
             if (!empty($_POST['sigla'])) {
-                printTable(selectFromTable(["count(*) as 'Municípios do etado'"], "", "Sigla_Estado=" . '\'' . $_POST['sigla'] . '\'', "", ""));
+                printTable(selectFromTable($pdo, $tabela, ["count(*) as 'Municípios do estado'"], "", "Sigla_Estado=" . '\'' . $_POST['sigla'] . '\'', "", ""));
             }
 
-            printTable(selectFromTable(["Município", "População", "Código_IBGE"], $orderByClause, $whereClause, $limitClause, ""));
+            printTable(selectFromTable($pdo, $tabela, ["Município", "População", "Código_IBGE"], $orderByClause, $whereClause, $limitClause, ""));
         }
 
         else if (isset($_POST['busca1'])) {
-            printTable(selectFromTable(["Município", "População", "Código_IBGE"], "População asc", "", 10, ""));
+            printTable(selectFromTable($pdo, $tabela, ["Município", "População", "Código_IBGE"], "População desc", "", 10, ""));
         }
 
         else if (isset($_POST['busca2'])) {
-            printTable(selectFromTable(["Município", "População", "Código_IBGE"], "População desc", "", 10, ""));
+            printTable(selectFromTable($pdo, $tabela, ["Município", "População", "Código_IBGE"], "População asc", "", 10, ""));
         }
 
         else if (isset($_POST['busca3'])) {
-            printTable(selectFromTable(["Unidade_federativa as 'Estado'", "sum(População) as 'População'"], "Unidade_Federativa", "", "", "Unidade_federativa"));
+            printTable(selectFromTable($pdo, $tabela, ["Unidade_federativa as 'Estado'", "sum(População) as 'População'"], "Unidade_Federativa", "", "", "Unidade_federativa"));
         }
     ?>
 </html>

@@ -1,8 +1,5 @@
 <?php
-    function selectFromTable($campos, $orderby, $whereClause, $limit, $groupby) {
-        $pdo = new PDO("mysql:host=127.0.0.1;dbname=a2022951047@teiacoltec.org", "a2022951047@teiacoltec.org", "coltec2024");
-        $tabela = 'municipios_brasil_populacao_2022_V5';
-
+    function selectFromTable($pdo, $tabela, $campos, $orderby, $whereClause, $limit, $groupby) {
         $max = count($campos);
         $string = 'SELECT  ';
 
@@ -35,7 +32,7 @@
             $string .= ';';
         }
 
-        echo $string;
+        // echo $string;
 
         $stmt = $pdo->prepare($string);
 

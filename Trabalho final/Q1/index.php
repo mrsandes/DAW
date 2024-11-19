@@ -111,8 +111,11 @@
     <?php   
         require_once("functions.php");
 
+        $pdo = new PDO("mysql:host=127.0.0.1;dbname=a2022951047@teiacoltec.org", "a2022951047@teiacoltec.org", "coltec2024");
+        $tabela = 'resultado_imiron';
+
         if (isset($_POST['all'])) {
-            printTable(selectFromTable(["*"], "", "", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["*"], "", "", "", ""));
         }
 
         else if (isset($_POST['busca'])) {
@@ -151,24 +154,24 @@
                 $orderByClause = "Overall_Rank IS NULL, Overall_Rank ";
             }
         
-            printTable(selectFromTable(["*"], $orderByClause . $_POST['top_down'], $whereClause, $_POST['quantidade_linhas'], ""));
+            printTable(selectFromTable($pdo, $tabela, ["*"], $orderByClause . $_POST['top_down'], $whereClause, $_POST['quantidade_linhas'], ""));
         }
 
         else if (isset($_POST['busca1'])) { 
-            printTable(selectFromTable(["count(*) as 'Brasilian athletes'"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
-            printTable(selectFromTable(["*"], 'Overall_Rank IS NULL, Overall_Rank', "Country='Brazil'", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["count(*) as 'Brasilian athletes'"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["*"], 'Overall_Rank IS NULL, Overall_Rank', "Country='Brazil'", "", ""));
         }
 
         else if (isset($_POST['busca2'])) { 
-            printTable(selectFromTable(["count(*) as 'Athletes'", "Country"], "", "", "", "Country"));
+            printTable(selectFromTable($pdo, $tabela, ["count(*) as 'Athletes'", "Country"], "", "", "", "Country"));
         }
 
         else if (isset($_POST['busca3'])) { 
-            printTable(selectFromTable(["Name", "Country", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time", "(Overall_Rank - Swim_Rank) AS Swim_Rank_Diff", "(Overall_Rank - Bike_Rank) AS Bike_Rank_Diff", "(Overall_Rank - Run_Rank) AS Run_Rank_Diff"], "Finish_Status desc, Division_Rank asc", "Division = 'MPRO'", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["Name", "Country", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time", "(Overall_Rank - Swim_Rank) AS Swim_Rank_Diff", "(Overall_Rank - Bike_Rank) AS Bike_Rank_Diff", "(Overall_Rank - Run_Rank) AS Run_Rank_Diff"], "Finish_Status desc, Division_Rank asc", "Division = 'MPRO'", "", ""));
         }
 
         else if (isset($_POST['busca4'])) { 
-            printTable(selectFromTable(["Name", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time"], "Finish_Status desc, Division_Rank asc", "Country='Brazil'", 1, ""));
+            printTable(selectFromTable($pdo, $tabela, ["Name", "Overall_Rank", "Swim_Rank", "Swim_Time", "Bike_Rank", "Bike_Time", "Run_Rank", "Run_Time"], "Finish_Status desc, Division_Rank asc", "Country='Brazil'", 1, ""));
         }
     ?>
 </html>
