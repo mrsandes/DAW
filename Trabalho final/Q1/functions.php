@@ -19,12 +19,12 @@
             $string .= ' where ' . $whereClause; 
         }
 
-        if (!empty($orderby)) {
-            $string .= ' order by ' . $orderby; 
-        }
-
         if (!empty($groupby)) {
             $string .= ' group by ' . $groupby; 
+        }
+
+        if (!empty($orderby)) {
+            $string .= ' order by ' . $orderby; 
         }
 
         if (!empty($limit)) {
