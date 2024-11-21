@@ -2,7 +2,7 @@
 
 <html>
 <head>
-    <title>Resultados Kona-2024</title>
+    <title>Exercicios</title>
     <link rel="stylesheet" href="style.css">
 </head>
 
