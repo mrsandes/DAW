@@ -158,7 +158,7 @@
         }
 
         else if (isset($_POST['busca1'])) { 
-            printTable(selectFromTable($pdo, $tabela, ["count(*) as 'Brasilian athletes'"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
+            printTable(selectFromTable($pdo, $tabela, ["count(*) as 'Brazilian athletes'"], 'Finish_Status desc, Division_Rank asc', "Country='Brazil'", "", ""));
             printTable(selectFromTable($pdo, $tabela, ["*"], 'Overall_Rank IS NULL, Overall_Rank', "Country='Brazil'", "", ""));
         }
 
